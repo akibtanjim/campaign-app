@@ -8,7 +8,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCampaignRequest;
+use App\Http\Requests\UpdateCampaignRequest;
 use App\Interfaces\ICampaignRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CampaignController extends Controller
 {
@@ -60,7 +62,14 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            return $this->successResponseHandler($this->campaignRepository->getCampaign($id), 'Campaign Fetch Successfully');
+        }  catch (ModelNotFoundException $e) {
+            return $this->customErrorResponse('Campaign not found', 404);
+        } catch (\Exception $error) {
+            Log::error($error);
+            return $this->customErrorResponse('Internal Error', 500);
+        }
     }
 
     /**
@@ -70,8 +79,16 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCampaignRequest $request, $id)
     {
-        //
+        try {
+            return $this->successResponseHandler($this->campaignRepository->modifyCampaign($request, $id), 'Campaign Updated Successfully');
+        } catch (ModelNotFoundException $e) {
+            return $this->customErrorResponse('Campaign not found', 404);
+        } catch (\Exception $error) {
+            dd($error);
+            Log::error($error);
+            return $this->customErrorResponse('Internal Error', 500);
+        }
     }
 }

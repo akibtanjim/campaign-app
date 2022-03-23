@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\StoreCampaignRequest;
+use App\Http\Requests\UpdateCampaignRequest;
 use App\Http\Traits\HelperTrait;
 use App\Models\Campaign;
 
@@ -33,32 +34,36 @@ class CampaignService
     }
 
     /**
-     * Store Image & Create Campaign In DB
+     * Get campaign by id
      *
-     * @param  StoreCampaignRequest $request
-     * @return array
+     * @param  integer  $id
+     * @return Campaign
+     * @throws ModelNotFoundException
      */
-    public function createCampaign(StoreCampaignRequest $request) : array
+    public function getDetails(int $id): Campaign
     {
-        $images = $this->storeImage($request->file('creative_upload'), 'campaigns');
-        return $this->campaign->query()->create($this->processData([...$request->validated(), 'creative_upload' => $images]))->toArray();
+        return $this->campaign->query()->findOrFail($id);
     }
 
     /**
-     * Processed Data For Create & Update Campaign
+     * Store Image & Create Campaign In DB
      *
      * @param  array $data
      * @return array
      */
-    private function processData(array $data): array
+    public function createCampaign(array $data) : array
     {
-        return [
-            'name' => $data['name'],
-            'from_date' => $data['from_date'],
-            'to_date' => $data['to_date'],
-            'total_budget' => $data['total_budget'],
-            'daily_budget' => $data['daily_budget'],
-            'creative_upload' => $data['creative_upload']
-        ];
+
+        return $this->campaign->query()->create($data)->toArray();
+    }
+
+    public function updateCampaign(array $data, $id) : array
+    {
+        $campaignDetails = $this->getDetails($id);
+        foreach ($data as $index => $value) {
+            $campaignDetails[$index] = $value;
+        }
+        $campaignDetails->save();
+        return $campaignDetails->toArray();
     }
 }
