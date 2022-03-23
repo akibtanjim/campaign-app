@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
-    Route::apiResource('campaigns', CampaignController::class);
+    Route::apiResource('campaigns', CampaignController::class)->except(['destroy']);
 });

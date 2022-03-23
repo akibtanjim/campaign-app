@@ -1,31 +1,43 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\Campaign;
+use App\Http\Requests\StoreCampaignRequest;
+use App\Services\CampaignService;
+use App\Interfaces\ICampaignRepositoryInterface;
 
-class CampaignRepository
+class CampaignRepository implements ICampaignRepositoryInterface
 {
-    protected $campaign;
+    protected $campaignService;
 
     /**
      * CampaignRepository Constructer
      *
-     * @param  Campaign  $campaign
+     * @param  CampaignService $campaignService
      * @return void
      */
-    public function __construct(Campaign $campaign)
+    public function __construct(CampaignService $campaignService)
     {
-        $this->campaign = $campaign;
+        $this->campaignService = $campaignService;
     }
 
 	/**
-	 * Get All The Campaigns In Descending Order From Database
+	 * Get All The Campaigns From Service
 	 *
 	 * @return array
 	 */
 	public function getAllCampaigns() : array
     {
-		return Campaign::orderBy('created_at', 'desc')->get()->toArray();
+		return $this->campaignService->getCampaigns();
 	}
 
+    /**
+     * Store Campaign
+     *
+     * @param  StoreCampaignRequest $request
+     * @return array
+     */
+    public function storeCampaign(StoreCampaignRequest $request) : array
+    {
+        return $this->campaignService->createCampaign($request);
+    }
 }

@@ -17,8 +17,8 @@ class Campaign extends Model
      */
     protected $fillable = [
         'name',
-        'start_date',
-        'end_date',
+        'from_date',
+        'to_date',
         'total_budget',
         'daily_budget',
         'creative_upload',
@@ -42,7 +42,7 @@ class Campaign extends Model
     protected function creativeUpload(): Attribute
     {
         return new Attribute(
-            get: fn ($data) => json_decode($data, true),
+            get: fn ($data) => json_decode($data, true, JSON_UNESCAPED_SLASHES),
             set: fn ($data) => json_encode($data),
         );
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 trait HelperTrait {
 
@@ -51,5 +52,26 @@ trait HelperTrait {
             'errors'    =>  [],
             'message'   =>  $message
         ], $statusCode);
+    }
+
+    /**
+     * Upload Multiple Images To Specified Directory
+     *
+     * @param  array $images
+     * @param  string $directory
+     * @return array
+     */
+    protected function storeImage(array $images = [], string $directory = '/'): array
+    {
+        $uploadedImages = [];
+        foreach ($images as $index => $value) {
+            $name = uniqid() . '_' . $value->getClientOriginalName();
+            Storage::put($directory. '/' . $name, $value->getContent());
+            $uploadedImages[$index] = [
+                'file_name' => $name,
+                'path' => Storage::url($directory. '/' . $name)
+            ];
+        }
+        return $uploadedImages;
     }
 }

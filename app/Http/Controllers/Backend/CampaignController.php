@@ -4,19 +4,21 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\HelperTrait;
-use App\Services\CampaignService;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCampaignRequest;
+use App\Interfaces\ICampaignRepositoryInterface;
 
 class CampaignController extends Controller
 {
     use HelperTrait;
 
-    protected $campaignService;
+    protected $campaignRepository;
 
-    public function __construct(CampaignService $campaignService)
+    public function __construct(ICampaignRepositoryInterface $campaignRepository)
     {
-        $this->campaignService = $campaignService;
+        $this->campaignRepository = $campaignRepository;
     }
 
     /**
@@ -27,22 +29,11 @@ class CampaignController extends Controller
     public function index()
     {
         try {
-            $data = $this->campaignService->getCampaigns();
-            return $this->successResponseHandler($data, 'Campaign List Fetched Successfully');
+            return $this->successResponseHandler($this->campaignRepository->getAllCampaigns(), 'Campaign List Fetched Successfully');
         } catch (\Exception $error) {
             Log::error($error);
             return $this->customErrorResponse('Internal Error', 500);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -51,9 +42,14 @@ class CampaignController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCampaignRequest $request) : JsonResponse
     {
-        //
+        try {
+            return $this->successResponseHandler($this->campaignRepository->storeCampaign($request), 'Campaign Created Successfully');
+        } catch (\Exception $error) {
+            Log::error($error);
+            return $this->customErrorResponse('Internal Error', 500);
+        }
     }
 
     /**
@@ -68,17 +64,6 @@ class CampaignController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,17 +71,6 @@ class CampaignController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }

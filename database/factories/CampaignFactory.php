@@ -22,10 +22,16 @@ class CampaignFactory extends Factory
             'to_date' => $this->faker->dateTimeBetween('+8 days', '+30 days'),
             'total_budget' => $this->faker->randomFloat(2, 1000, 15000),
             'daily_budget' => $this->faker->randomFloat(2, 500, 999),
-            'creative_upload' => $this->faker->shuffleArray([
-                $this->faker->imageUrl(),
-                $this->faker->imageUrl(),
-            ]),
+            'creative_upload' => [
+                [
+                    'file_name' => $this->faker->imageUrl(),
+                    'path' => $this->faker->imageUrl()
+                ],
+                [
+                    'file_name' => $this->faker->imageUrl(),
+                    'path' => $this->faker->imageUrl()
+                ],
+            ],
         ];
     }
 }
