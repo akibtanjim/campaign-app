@@ -16,11 +16,10 @@ class CampaignFactory extends Factory
      */
     public function definition() : array
     {
-        $fromTime = $this->faker->dateTimeBetween('-30 days', '+30 days');
         return [
             'name' => $this->faker->words(3, true),
-            'from_date' => $fromTime,
-            'to_date' => $this->faker->dateTimeBetween($fromTime, $fromTime->modify('+15 days')),
+            'from_date' => $this->faker->dateTimeBetween('-30 days', '+30 days'),
+            'to_date' => $this->faker->dateTimeBetween('+8 days', '+30 days'),
             'total_budget' => $this->faker->randomFloat(2, 1000, 15000),
             'daily_budget' => $this->faker->randomFloat(2, 500, 999),
             'creative_upload' => $this->faker->shuffleArray([
