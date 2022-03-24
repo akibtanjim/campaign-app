@@ -66,7 +66,7 @@ trait HelperTrait {
         $uploadedImages = [];
         foreach ($images as $index => $value) {
             $name = uniqid() . '_' . $value->getClientOriginalName();
-            Storage::put($directory. '/' . $name, $value->getContent());
+            Storage::put('public/'. $directory. '/' . $name, $value->getContent());
             $uploadedImages[$index] = [
                 'file_name' => $name,
                 'path' => Storage::url($directory. '/' . $name)
@@ -84,7 +84,7 @@ trait HelperTrait {
     private function deleteImage(array $images = [] , string $directory = '/'): void
     {
         foreach ($images as $image) {
-            Storage::delete($directory. '/' . $image['file_name']);
+            Storage::delete('public/'. $directory . '/' . $image['file_name']);
         }
     }
 }

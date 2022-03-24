@@ -34,7 +34,7 @@ class CampaignController extends Controller
             return $this->successResponseHandler($this->campaignRepository->getAllCampaigns(), 'Campaign List Fetched Successfully');
         } catch (\Exception $error) {
             Log::error($error);
-            return $this->customErrorResponse('Internal Error', 500);
+            return $this->customErrorResponse('Internal Server Error', 500);
         }
     }
 
@@ -50,7 +50,7 @@ class CampaignController extends Controller
             return $this->successResponseHandler($this->campaignRepository->storeCampaign($request), 'Campaign Created Successfully');
         } catch (\Exception $error) {
             Log::error($error);
-            return $this->customErrorResponse('Internal Error', 500);
+            return $this->customErrorResponse('Internal Server Error', 500);
         }
     }
 
@@ -68,7 +68,7 @@ class CampaignController extends Controller
             return $this->customErrorResponse('Campaign not found', 404);
         } catch (\Exception $error) {
             Log::error($error);
-            return $this->customErrorResponse('Internal Error', 500);
+            return $this->customErrorResponse('Internal Server Error', 500);
         }
     }
 
@@ -87,7 +87,7 @@ class CampaignController extends Controller
             return $this->customErrorResponse('Campaign not found', 404);
         } catch (\Exception $error) {
             Log::error($error);
-            return $this->customErrorResponse('Internal Error', 500);
+            return $this->customErrorResponse('Internal Server Error', 500);
         }
     }
 }
