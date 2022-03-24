@@ -61,9 +61,10 @@ class CampaignRepository implements ICampaignRepositoryInterface
         $campaign = $this->campaignService->getDetails($id);
         $images = $request->file('creative_upload') ? $this->storeImage($request->file('creative_upload'), 'campaigns') : $campaign->creative_upload;
         $updatedCampaign = $this->campaignService->updateCampaign($this->processData([...$request->validated(), 'creative_upload' => $images]), $id);
-        if (empty($updatedCampaign)) {
+
+        if ($updatedCampaign) {
             $prevImages = $campaign->creative_upload;
-            $this->deleteImage($prevImages);
+            $this->deleteImage($prevImages, 'campaigns');
         }
         return $updatedCampaign;
     }

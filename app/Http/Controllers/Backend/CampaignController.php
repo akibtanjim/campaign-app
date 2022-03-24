@@ -86,7 +86,6 @@ class CampaignController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->customErrorResponse('Campaign not found', 404);
         } catch (\Exception $error) {
-            dd($error);
             Log::error($error);
             return $this->customErrorResponse('Internal Error', 500);
         }

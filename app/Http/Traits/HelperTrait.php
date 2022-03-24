@@ -81,10 +81,10 @@ trait HelperTrait {
      * @param  array $images
      * @return void
      */
-    private function deleteImage(array $images): void
+    private function deleteImage(array $images = [] , string $directory = '/'): void
     {
         foreach ($images as $image) {
-            Storage::delete('campaigns/' . $image['file_name']);
+            Storage::delete($directory. '/' . $image['file_name']);
         }
     }
 }
