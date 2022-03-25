@@ -14,6 +14,9 @@ use App\Http\Controllers\Frontend\CampaignController;
 |
 */
 
+Route::get('/',  function () {
+    return redirect('/campaigns');
+});
 Route::group(['namespace' => 'Frontend', 'prefix' => 'campaigns'], function () {
     Route::get('/', [CampaignController::class, 'index'])->name('campaigns.list');
     Route::get('/create', [CampaignController::class, 'create'])->name('campaigns.create');
